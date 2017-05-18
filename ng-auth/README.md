@@ -2,7 +2,7 @@
 
 [![Angular Style Guide][angular-style-guide-badge]][angular-style-guide-badge-url]
 
-Simple Angular authentication app made with {{ &nbsp; :heart: &nbsp; }}
+Simple authentication app made with {{ &nbsp; :heart: &nbsp; }}
 
 ## Based on
 
