@@ -1,0 +1,42 @@
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary bg-faded">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Ng - Auth</a>
+    <!-- Show this for logged out users -->
+    <!--<ul *showAuthed="false" class="nav navbar-nav pull-xs-right">-->
+    <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/">
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/login" routerLinkActive="active">
+          Sign in
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/register" routerLinkActive="active">
+          Sign up
+        </a>
+      </li>
+    </ul>
+    <!-- Show this for logged in users -->
+    <ul *appShowAuthed="true" class="nav navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/logout" routerLinkActive="active">
+          Sign out
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
