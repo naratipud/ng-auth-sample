@@ -56,7 +56,10 @@ router.post('/login', function (req, res) {
                     // return the information including token as JSON
                     res.json({
                         success: true,
-                        token: token
+                        user: {
+                            username: user.username,
+                            token: token
+                        }
                     });
                 } else {
                     res.send({
