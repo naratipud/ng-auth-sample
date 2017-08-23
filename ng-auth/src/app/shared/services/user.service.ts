@@ -10,6 +10,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { User } from '../models/user.model';
 import { ApiService } from './api.service';
 import { JwtService } from './jwt.service';
+import { Error } from '../models/error.model';
 
 @Injectable()
 export class UserService {
@@ -30,10 +31,7 @@ export class UserService {
     // If JWT detected, attempt to get & store user's info
     if (this.jwtService.getToken()) {
       this.apiService.get('/user')
-        .subscribe(
-        data => this.setAuth(data.user),
-        err => this.purgeAuth()
-        );
+        .subscribe(data => this.setAuth(data), err => this.purgeAuth());
     } else {
       // Remove any potential remnants of previous auth states
       this.purgeAuth();
@@ -58,15 +56,17 @@ export class UserService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  attemptAuth(type, credentials): Observable<User> {
+  attemptAuth(type, credentials): Observable<User | Error> {
     const route = (type === 'login') ? '/login' : '';
     return this.apiService.post(route, { user: credentials })
-      .map(
-      data => {
-        this.setAuth(data);
-        return data;
-      }
-      );
+      .map(repData => {
+        if (repData.success) {
+          this.setAuth(repData.user as User);
+          return repData.user as User;
+        } else {
+          return repData as Error;
+        }
+      });
   }
 
   getCurrentUser(): User {
@@ -79,9 +79,8 @@ export class UserService {
       .put('/user', { user })
       .map(data => {
         // Update the currentUser observable
-        this.currentUserSubject.next(data.user);
-        return data.user;
+        this.currentUserSubject.next(data);
+        return data;
       });
   }
-
 }

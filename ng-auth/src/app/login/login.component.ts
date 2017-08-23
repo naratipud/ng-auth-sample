@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'app/shared/services';
 
-interface Credentials {
-  username: string;
-  password: string;
-}
+import { UserService } from 'app/shared/services';
+import { User } from 'app/shared/models/user.model';
+import { Error } from 'app/shared/models/error.model';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +15,7 @@ export class LoginComponent implements OnInit {
   title = '';
   isSubmitting = false;
   authForm: FormGroup;
+  stateUrl = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +41,9 @@ export class LoginComponent implements OnInit {
         this.authForm.addControl('username', new FormControl());
       }
     });
+
+    // Get query params
+    this.route.queryParams.subscribe(params => this.stateUrl = params['returnState'] || '/home');
   }
 
   submitForm() {
@@ -50,15 +52,19 @@ export class LoginComponent implements OnInit {
 
     const credentials = this.authForm.value;
     this.userService
-    .attemptAuth(this.authType, credentials)
-    .subscribe(
-      data => this.router.navigateByUrl('/dashboard'),
-      err => {
+      .attemptAuth(this.authType, credentials)
+      .subscribe(data => {
+        // TODO: Verify login success
+        if ((<User>data).token) {
+          this.router.navigateByUrl(this.stateUrl);
+        } else {
+          this.isSubmitting = false;
+          console.warn('Login failed: ', (<Error>data).msg);
+        }
+      }, err => {
         // this.errors = err;
         this.isSubmitting = false;
-        console.error('Login Component Error: ', err);
-      }
-    );
+        console.error('Login Error: ', err);
+      });
   }
-
 }
