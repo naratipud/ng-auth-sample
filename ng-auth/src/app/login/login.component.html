@@ -1,15 +1,37 @@
-<div class="container body-container">
-  <div class="col-sm-8 col-sm-offset-2">
-  <form style="margin-top: 20px">
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email">
+<div class="auth-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+        <h3 class="text-xs-center"
+          style="padding-top: 5%; padding-bottom: 5%">{{ title }}</h3>
+        <!-- <p class="text-xs-center">
+          <a [routerLink]="['/login']">Have an account?</a>
+          <a [routerLink]="['/register']">Need an account?</a>
+        </p> -->
+        <!-- <list-errors [errors]="errors"></list-errors> -->
+        <form [formGroup]="authForm"
+          (ngSubmit)="submitForm()">
+          <fieldset [disabled]="isSubmitting">
+            <fieldset class="form-group">
+              <input formControlName="username"
+                placeholder="Email"
+                class="form-control form-control-lg"
+                type="text" />
+            </fieldset>
+            <fieldset class="form-group">
+              <input formControlName="password"
+                placeholder="Password"
+                class="form-control form-control-lg"
+                type="password" />
+            </fieldset>
+            <button [disabled]="!authForm.valid"
+              class="btn btn-lg btn-primary pull-xs-right"
+              type="submit">
+              {{ title }}
+            </button>
+          </fieldset>
+        </form>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
   </div>
 </div>
