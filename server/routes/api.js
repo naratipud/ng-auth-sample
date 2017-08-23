@@ -35,9 +35,10 @@ router.post('/signup', function (req, res) {
     }
 });
 
-router.post('/signin', function (req, res) {
+router.post('/login', function (req, res) {
+    // console.log('User: ', req.body.user);
     User.findOne({
-        username: req.body.username
+        username: req.body.user.username
     }, function (err, user) {
         if (err) throw err;
 
@@ -48,14 +49,14 @@ router.post('/signin', function (req, res) {
             });
         } else {
             // check if password matches
-            user.comparePassword(req.body.password, function (err, isMatch) {
+            user.comparePassword(req.body.user.password, function (err, isMatch) {
                 if (isMatch && !err) {
                     // if user is found and password is right create a token
                     var token = jwt.sign(user, config.secret);
                     // return the information including token as JSON
                     res.json({
                         success: true,
-                        accessToken: 'JWT ' + token
+                        token: token
                     });
                 } else {
                     res.send({
