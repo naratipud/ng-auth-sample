@@ -1,7 +1,7 @@
 # Server side with Node.js
 
-### Development server
+## Development server
 
-```
+```bash
 npm run dev
 ```
