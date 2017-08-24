@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
     this.userService
       .attemptAuth(this.authType, credentials)
       .subscribe(data => {
-        // TODO: Verify login success
         if ((<User>data).token) {
           this.router.navigateByUrl(this.stateUrl);
         } else {

@@ -57,14 +57,14 @@ export class UserService {
   }
 
   attemptAuth(type, credentials): Observable<User | Error> {
-    const route = (type === 'login') ? '/login' : '';
+    const route = (type === 'login') ? '/login' : '/signup';
     return this.apiService.post(route, { user: credentials })
-      .map(repData => {
-        if (repData.success) {
-          this.setAuth(repData.user as User);
-          return repData.user as User;
+      .map(data => {
+        if (data.success) {
+          this.setAuth(data.user as User);
+          return data.user as User;
         } else {
-          return repData as Error;
+          return data as Error;
         }
       });
   }

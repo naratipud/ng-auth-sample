@@ -27,9 +27,14 @@ router.post('/signup', (req, res) => {
                     msg: 'Username already exists.'
                 });
             }
+
+            let token = jwt.sign(newUser, config.secret);
             res.json({
                 success: true,
-                msg: 'Successful created new user.'
+                user: {
+                    username: newUser.username,
+                    token: token
+                }
             });
         });
     }
