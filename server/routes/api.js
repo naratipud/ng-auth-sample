@@ -1,26 +1,26 @@
-var mongoose = require('mongoose');
-var passport = require('passport');
-var config = require('../config/database');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const config = require('../config/database');
 require('../config/passport')(passport);
-var express = require('express');
-var jwt = require('jsonwebtoken');
-var router = express.Router();
-var User = require("../models/user");
-var Book = require("../models/book");
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const router = express.Router();
+const User = require("../models/user");
+const Book = require("../models/book");
 
-router.post('/signup', function (req, res) {
-    if (!req.body.username || !req.body.password) {
+router.post('/signup', (req, res) => {
+    if (!req.body.user.username || !req.body.user.password) {
         res.json({
             success: false,
             msg: 'Please pass username and password.'
         });
     } else {
-        var newUser = new User({
-            username: req.body.username,
-            password: req.body.password
+        let newUser = new User({
+            username: req.body.user.username,
+            password: req.body.user.password
         });
         // save the user
-        newUser.save(function (err) {
+        newUser.save((err) => {
             if (err) {
                 return res.json({
                     success: false,
@@ -35,11 +35,11 @@ router.post('/signup', function (req, res) {
     }
 });
 
-router.post('/login', function (req, res) {
+router.post('/login', (req, res) => {
     // console.log('User: ', req.body.user);
     User.findOne({
         username: req.body.user.username
-    }, function (err, user) {
+    }, (err, user) => {
         if (err) throw err;
 
         if (!user) {
@@ -49,10 +49,10 @@ router.post('/login', function (req, res) {
             });
         } else {
             // check if password matches
-            user.comparePassword(req.body.user.password, function (err, isMatch) {
+            user.comparePassword(req.body.user.password, (err, isMatch) => {
                 if (isMatch && !err) {
                     // if user is found and password is right create a token
-                    var token = jwt.sign(user, config.secret);
+                    let token = jwt.sign(user, config.secret);
                     // return the information including token as JSON
                     res.json({
                         success: true,
@@ -74,18 +74,19 @@ router.post('/login', function (req, res) {
 
 router.post('/book', passport.authenticate('jwt', {
     session: false
-}), function (req, res) {
-    var token = getToken(req.headers);
+}), (req, res) => {
+    let token = getToken(req.headers);
+
     if (token) {
         console.log(req.body);
-        var newBook = new Book({
+        let newBook = new Book({
             isbn: req.body.isbn,
             title: req.body.title,
             author: req.body.author,
             publisher: req.body.publisher
         });
 
-        newBook.save(function (err) {
+        newBook.save((err) => {
             if (err) {
                 return res.json({
                     success: false,
@@ -107,10 +108,11 @@ router.post('/book', passport.authenticate('jwt', {
 
 router.get('/book', passport.authenticate('jwt', {
     session: false
-}), function (req, res) {
-    var token = getToken(req.headers);
+}), (req, res) => {
+    let token = getToken(req.headers);
+
     if (token) {
-        Book.find(function (err, books) {
+        Book.find((err, books) => {
             if (err) return next(err);
             res.json(books);
         });
@@ -122,9 +124,10 @@ router.get('/book', passport.authenticate('jwt', {
     }
 });
 
-getToken = function (headers) {
+getToken =  (headers) => {
     if (headers && headers.authorization) {
-        var parted = headers.authorization.split(' ');
+        let parted = headers.authorization.split(' ');
+        
         if (parted.length === 2) {
             return parted[1];
         } else {
