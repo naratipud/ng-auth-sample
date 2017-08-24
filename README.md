@@ -1,8 +1,10 @@
-# Sample authentication with Node.js and Angular
+# Sample authenticate with Angular and Node.js
+
+Demonstrate authentication with Angular and Node.js
 
 ## Stack
 
-- Angular with CLI
+- Angular
 - Node.js
 - MongoDB
 
@@ -39,4 +41,5 @@ This will start the api service at the following url: `http://localhost:3000`
 
 - [x] Log In
 - [x] Log Out
-- [ ] Sign up
+- [x] Sign up
+- [ ] Error handling
