@@ -28,7 +28,7 @@ npm run dev
 
 This will start the api service at the following url: `http://localhost:3000`
 
-### TODO
+## TODO
 
 - [x] Log In
 - [x] Log Out
