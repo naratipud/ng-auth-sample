@@ -10,7 +10,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { User } from '../models/user.model';
 import { ApiService } from './api.service';
 import { JwtService } from './jwt.service';
-import { Error } from '../models/error.model';
 
 @Injectable()
 export class UserService {
@@ -56,16 +55,14 @@ export class UserService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  attemptAuth(type, credentials): Observable<User | Error> {
+  attemptAuth(type, credentials): Observable<any> {
     const route = (type === 'login') ? '/login' : '/signup';
     return this.apiService.post(route, { user: credentials })
       .map(data => {
         if (data.success) {
           this.setAuth(data.user as User);
-          return data.user as User;
-        } else {
-          return data as Error;
         }
+        return data;
       });
   }
 

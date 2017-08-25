@@ -4,6 +4,7 @@ import { Headers, Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 import { JwtService } from './jwt.service';
 import { environment } from 'environments/environment';
@@ -15,27 +16,6 @@ export class ApiService {
     private http: Http,
     private jwtService: JwtService
   ) { }
-
-  private setHeaders(): Headers {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    // const headersConfig = {
-    //   'Content-Type': 'application/json',
-    //   'Accept': 'application/json'
-    // };
-
-    if (this.jwtService.getToken()) {
-      // headersConfig['Authorization'] = `Token ${this.jwtService.getToken()}`;
-      headers.append('Authorization', `Token ${this.jwtService.getToken()}`);
-    }
-    // return new Headers(headersConfig);
-    return headers;
-  }
-
-  private formatErrors(error: any) {
-    return Observable.throw(error.json());
-  }
 
   get(endpoint: string, params: URLSearchParams = new URLSearchParams()): Observable<any> {
     const option = { headers: this.setHeaders(), search: params };
@@ -63,5 +43,26 @@ export class ApiService {
     return this.http.delete(`${environment.api_url}${endpoint}`, option)
       .catch(this.formatErrors)
       .map((res: Response) => res.json());
+  }
+
+  private setHeaders(): Headers {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    // const headersConfig = {
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json'
+    // };
+
+    if (this.jwtService.getToken()) {
+      // headersConfig['Authorization'] = `Token ${this.jwtService.getToken()}`;
+      headers.append('Authorization', `Token ${this.jwtService.getToken()}`);
+    }
+    // return new Headers(headersConfig);
+    return headers;
+  }
+
+  private formatErrors(error: any) {
+    return Observable.throw(error.json());
   }
 }
