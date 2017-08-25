@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { UserService } from 'app/shared/services';
 import { User } from 'app/shared/models/user.model';
-import { Error } from 'app/shared/models/error.model';
+import { Errors } from '../shared/models/errors.model';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   isSubmitting = false;
   authForm: FormGroup;
   stateUrl = '';
+  errors: Errors = new Errors();
 
   constructor(
     private route: ActivatedRoute,
@@ -48,22 +49,21 @@ export class LoginComponent implements OnInit {
 
   submitForm() {
     this.isSubmitting = true;
-    // this.errors = new Errors();
+    this.errors = new Errors();
 
     const credentials = this.authForm.value;
     this.userService
       .attemptAuth(this.authType, credentials)
       .subscribe(data => {
-        if ((<User>data).token) {
+        if (data.token) {
           this.router.navigateByUrl(this.stateUrl);
         } else {
+          this.errors = data;
           this.isSubmitting = false;
-          console.warn('Login failed: ', (<Error>data).msg);
         }
       }, err => {
-        // this.errors = err;
+        this.errors = err;
         this.isSubmitting = false;
-        console.error('Login Error: ', err);
       });
   }
 }

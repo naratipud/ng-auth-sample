@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { ShowAuthedDirective } from './show-authed.directive';
+import { ListErrorsComponent } from './list-errors/list-errors.component';
 
 @NgModule({
   imports: [
@@ -15,10 +16,12 @@ import { ShowAuthedDirective } from './show-authed.directive';
     RouterModule
   ],
   exports: [
-    ShowAuthedDirective
+    ShowAuthedDirective,
+    ListErrorsComponent
   ],
   declarations: [
-    ShowAuthedDirective
+    ShowAuthedDirective,
+    ListErrorsComponent
   ],
   providers: [],
 })
