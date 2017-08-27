@@ -42,4 +42,4 @@ This will start the api service at the following url: `http://localhost:3000`
 - [x] Log In
 - [x] Log Out
 - [x] Sign up
-- [ ] Error handling
+- [x] Error handling
