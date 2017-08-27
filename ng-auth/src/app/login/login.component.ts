@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     });
 
     // Get query params
-    this.route.queryParams.subscribe(params => this.stateUrl = params['returnState'] || '/home');
+    this.route.queryParams.subscribe(params => this.stateUrl = params['continue'] || '/home');
   }
 
   submitForm() {
@@ -55,12 +55,7 @@ export class LoginComponent implements OnInit {
     this.userService
       .attemptAuth(this.authType, credentials)
       .subscribe(data => {
-        if (data.token) {
-          this.router.navigateByUrl(this.stateUrl);
-        } else {
-          this.errors = data;
-          this.isSubmitting = false;
-        }
+        this.router.navigateByUrl(this.stateUrl);
       }, err => {
         this.errors = err;
         this.isSubmitting = false;
