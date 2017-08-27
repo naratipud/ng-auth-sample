@@ -29,8 +29,8 @@ export class UserService {
   populate() {
     // If JWT detected, attempt to get & store user's info
     if (this.jwtService.getToken()) {
-      this.apiService.get('/user')
-        .subscribe(data => this.setAuth(data), err => this.purgeAuth());
+      this.apiService.get('/users/user')
+        .subscribe(data => this.setAuth(data.user as User), err => this.purgeAuth());
     } else {
       // Remove any potential remnants of previous auth states
       this.purgeAuth();
@@ -57,7 +57,7 @@ export class UserService {
 
   attemptAuth(type, credentials): Observable<any> {
     const route = (type === 'login') ? '/login' : '/signup';
-    return this.apiService.post(route, { user: credentials })
+    return this.apiService.post('/users' + route, credentials)
       .map(data => {
         if (data.success) {
           this.setAuth(data.user as User);
@@ -73,7 +73,7 @@ export class UserService {
   // Update the user on the server (email, pass, etc)
   update(user): Observable<User> {
     return this.apiService
-      .put('/user', { user })
+      .put('/users/user', user)
       .map(data => {
         // Update the currentUser observable
         this.currentUserSubject.next(data);
